@@ -1,1 +1,1 @@
-Repositorio que servira como base de arquivos usados do curso de Desenvolvimento de Jogos web
+gos digitaisRepositorio que servira como base de arquivos usados do curso de Programação de Jogos Digitais
