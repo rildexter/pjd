@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Escolha a Sua Arma, Arqueiro</h1>
+    <p id="dialogo">NPC: Arqueiro, agora escolha seu arco para a batalha:</p>
+    
+    <div style="display: inline-flex;">
+        <img id="personagemImagem" src="./img/arqueiro.jpg" alt="Imagem do Personagem">
+        <img id="armaImagem" style="display: none; height: 100px; width: auto; margin-top: 20px;" alt="Arma">
+    </div>
+    <br/>
+    <button onclick="escolherArma('arcoc')">Arco Curto</button>
+    <button onclick="escolherArma('arcol')">Arco Longo</button>
+    <button onclick="escolherArma('besta')">Besta</button>
+
+    <a id="continueLink" onclick="fim()" style="display: none;"><button>Continue</button></a>
+    
+    <script src="script.js"></script>
+</body>
+</html>

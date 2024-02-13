@@ -1,0 +1,34 @@
+<!-- Exemplo Prático: Integração de Eventos com Animações -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .interactive-element {
+            width: 100px;
+            height: 100px;
+            background-color: blue;
+            transition: background-color 1.0s;
+        }
+
+        .interactive-element:hover {
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="interactive-element"></div>
+
+    <script>
+        // JavaScript para manipular evento de hover
+        const interactiveElement = document.querySelector('.interactive-element');
+        interactiveElement.addEventListener('mouseover', () => {
+            interactiveElement.style.backgroundColor = 'red';
+        });
+        interactiveElement.addEventListener('mouseout', () => {
+            interactiveElement.style.backgroundColor = 'blue';
+        });
+    </script>
+</body>
+</html>

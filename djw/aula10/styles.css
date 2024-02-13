@@ -1,0 +1,23 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.quadrado {
+    width: 100px;
+    height: 100px;
+    margin: 10px;
+    border: 1px solid black;
+    background-color: blue;
+    transition: background-color 1.0s;
+}

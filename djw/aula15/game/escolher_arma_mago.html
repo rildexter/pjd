@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Escolha Seu Objeto Mágico</h1>
+    <p id="dialogoObjeto">Escolha um objeto mágico para potencializar os poderes do Mago:</p>
+
+
+    <img id="personagemImagem" src="./img/mago.jpg" alt="Imagem do Personagem">
+    <button  onclick="escolherObjeto('Varinha')">Varinha</button>
+    <button  onclick="escolherObjeto('Livro')">Livro de Feitiços</button>
+    <button  onclick="escolherObjeto('Cajado')">Cajado</button>
+    <img id="objetoImagem" alt="Objeto Mágico" style="display: none;">
+
+    <button id="continueButton" onclick="continuarJogoM()" style="display: none;">Continue</button>
+
+    <script src="script.js"></script>
+</body>
+</html>

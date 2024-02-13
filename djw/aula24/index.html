@@ -1,0 +1,53 @@
+<!doctype html> 
+<html lang="pt-br"> 
+<head> 
+    <meta charset="UTF-8" />
+    <title>Making your first Phaser 3 Game - Part 1</title>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<script type="text/javascript">
+
+    var config = {
+ /*A typepropriedade pode ser Phaser.CANVAS, Phaser.WEBGLou Phaser.AUTO. 
+ Este é o contexto de renderização que você deseja usar no seu jogo. 
+ O valor recomendado é Phaser.AUTO aquele que tenta usar WebGL 
+ automaticamente, mas se o navegador ou dispositivo não suportar, 
+ ele retornará ao Canvas. O elemento canvas criado pelo Phaser será 
+ simplesmente anexado ao documento no momento em que o script foi 
+ chamado, mas você também pode especificar um contêiner pai na 
+ configuração do jogo, se desejar.*/
+        type: Phaser.AUTO,
+        width: 800,
+        height: 600,
+        scene: {
+            preload: preload,
+            create: create,
+            update: update
+        }
+    };
+
+    var game = new Phaser.Game(config);
+
+    function preload ()
+    {
+    }
+
+    function create ()
+    {
+    }
+
+    function update ()
+    {
+    }
+
+</script>
+
+</body>
+</html>

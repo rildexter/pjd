@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phaser Energy Bar Example</title>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
+</head>
+<body>
+
+<script type="text/javascript">
+    var config = {
+        type: Phaser.AUTO,
+        width: 800,
+        height: 600,
+        physics: {
+            default: 'arcade',
+            arcade: {
+                gravity: { y: 0 },
+                debug: false
+            }
+        },
+        scene: {
+            preload: preload,
+            create: create,
+            update: update
+        }
+    };
+
+    var game = new Phaser.Game(config);
+    var player;
+    var energyBar;
+    var bonusButton;
+    var damageButton;
+
+    function preload() {
+        this.load.image('sky', 'sky.png');
+        this.load.spritesheet('hero', 'hero.png', { frameWidth: 64, frameHeight: 64 });
+    }
+
+    function create() {
+        this.add.image(400, 300, 'sky');
+
+        // Adiciona o sprite do herói
+        player = this.physics.add.sprite(400, 300, 'hero');
+
+        // Adiciona a barra de energia
+        energyBar = this.add.graphics();
+        drawEnergyBar(100);
+
+        // Adiciona o botão de bônus
+        bonusButton = this.add.text(100, 500, 'Bônus', { fontSize: '24px', fill: '#00f' }).setInteractive();
+        bonusButton.on('pointerdown', bonusClick, this);
+
+        // Adiciona o botão de dano
+        damageButton = this.add.text(600, 500, 'Dano', { fontSize: '24px', fill: '#f00' }).setInteractive();
+        damageButton.on('pointerdown', damageClick, this);
+
+        // Cria a animação
+        this.anims.create({
+            key: 'moveHero',
+            frames: this.anims.generateFrameNumbers('hero', { start: 0, end: 11 }),
+            frameRate: 6,
+            repeat: -1,
+        });
+
+        // Inicia a animação
+        player.anims.play('moveHero', true);
+    }
+
+    function update() {
+        // Lógica de atualização do jogo vai aqui
+    }
+
+    function bonusClick() {
+        drawEnergyBar(Math.min(energyBar.percent + 20, 100));
+        player.setTint(0x0000ff);
+        setTimeout(() => {
+            player.clearTint();
+        }, 200);
+    }
+
+    function damageClick() {
+        drawEnergyBar(Math.max(energyBar.percent - 20, 0));
+        player.setTint(0xff0000);
+        setTimeout(() => {
+            player.clearTint();
+        }, 200);
+    }
+
+    function drawEnergyBar(percent) {
+        energyBar.clear();
+        energyBar.fillStyle(0x00ff00, 1);
+        energyBar.fillRect(50, 50, percent * 3, 20);
+        energyBar.percent = percent;
+    }
+</script>
+
+</body>
+</html>

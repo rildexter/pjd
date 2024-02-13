@@ -1,0 +1,206 @@
+<!doctype html> 
+<html lang="pt-br"> 
+<head> 
+    <meta charset="UTF-8" />
+    <title>Criando nosso jogo</title>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <script type="text/javascript">
+    
+    var config = {
+        type: Phaser.AUTO,
+        width: 800,
+        height: 600,
+        physics: {
+            default: 'arcade',
+            arcade: {
+                gravity: { y: 300 },
+                debug: false
+            }
+        },
+        scene: {
+            preload: preload,
+            create: create,
+            update: update
+        }
+    };
+    
+    var player;
+    var coins;
+    //variavel bomba
+    var bombs;
+    var platforms;
+    var cursors;
+    var score = 0;
+    var gameOver = false;
+    var scoreText;
+    
+    var game = new Phaser.Game(config);
+    
+    function preload ()
+    {
+        this.load.image('sky', 'assets/sky.png');
+        this.load.image('ground', 'assets/platform.png');
+        this.load.image('coins', 'assets/coin.png');
+        this.load.image('bomb', 'assets/bomb.png');
+        this.load.spritesheet('dude', 'assets/boy.png', { frameWidth: 32, frameHeight: 44});
+    
+    }
+    
+    function create ()
+    {
+        // Um ​​plano de fundo simples para nosso jogo
+        this.add.image(400, 300, 'sky');
+    
+        // O grupo de plataformas contém o chão e as 2 plataformas onde podemos pular
+        platforms = this.physics.add.staticGroup();
+    
+         // Aqui criamos o terreno.
+        // Dimensione-o para caber na largura do jogo (o sprite original tem tamanho 400x32)
+        platforms.create(400, 568, 'ground').setScale(2).refreshBody();
+        platforms.create(600, 400, 'ground');
+        platforms.create(50, 250, 'ground');
+        platforms.create(750, 220, 'ground');
+    
+        // Configurações do jogador
+        player = this.physics.add.sprite(100, 450, 'dude').setScale(2);
+    
+        // Propriedades físicas do jogador.
+        player.setBounce(0.2);
+        player.setCollideWorldBounds(true);
+    
+        // Nossas animações de jogador, virando, andando para a esquerda e andando para a direita.
+        this.anims.create({
+            key: 'left',
+            frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 5 }),
+            frameRate: 10,
+            repeat: -1
+        });
+    
+        this.anims.create({
+            key: 'turn',
+            frames: [ { key: 'dude', frame: 6 } ],
+            frameRate: 20
+        });
+    
+        this.anims.create({
+            key: 'right',
+            frames: this.anims.generateFrameNumbers('dude', { start: 7, end: 10 }),
+            frameRate: 10,
+            repeat: -1
+        });
+    
+        // os eventos de entrada
+        cursors = this.input.keyboard.createCursorKeys();
+    
+       // Algumas estrelas para coletar, 12 no total, espaçadas uniformemente em 70 pixels ao longo do eixo x
+        coins = this.physics.add.group({
+            key: 'coins',
+            repeat: 1,
+            setXY: { x: 12, y: 0, stepX: 70 }
+        });
+    
+        coins.children.iterate(function (child) {
+    
+            // Dê a cada estrela um salto ligeiramente diferente
+            child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+    
+        });
+    
+        bombs = this.physics.add.group();
+    
+        // o score
+        scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+    
+        // Colide o jogador e as estrelas com as plataformas
+        this.physics.add.collider(player, platforms);
+        this.physics.add.collider(coins, platforms);
+
+//aqui temos as bombas colidindo com plataformas
+        this.physics.add.collider(bombs, platforms);
+    
+        // Verifica se o jogador se sobrepõe a alguma das estrelas, se ele chama a função collectCoins
+        this.physics.add.overlap(player, coins, collectCoins, null, this);
+    
+
+  //aqui temos as bombas colidindo com plataformas
+        this.physics.add.collider(player, bombs, hitBomb, null, this);
+    }
+    
+    function update ()
+    {
+        if (gameOver)
+        {
+            return;
+        }
+    
+        if (cursors.left.isDown)
+        {
+            player.setVelocityX(-160);
+            player.anims.play('left', true);
+        }
+        else if (cursors.right.isDown)
+        {
+            player.setVelocityX(160);
+            player.anims.play('right', true);
+        }
+        else
+        {
+            player.setVelocityX(0);
+            player.anims.play('turn');
+        }
+    
+        if (cursors.up.isDown && player.body.touching.down)
+        {
+            player.setVelocityY(-330);
+        }
+    }
+    
+    function collectCoins (player, star)
+    {
+        star.disableBody(true, true);
+    
+        //Adiciona e atualiza a pontuação
+        score += 10;
+        scoreText.setText('Score: ' + score);
+    
+        if (coins.countActive(true) === 0)
+        {
+         // Um ​​novo lote de estrelas para coletar
+            coins.children.iterate(function (child) {
+    
+                child.enableBody(true, child.x, 0, true, true);
+    
+            });
+    // aqui configuramos o local onde as bombas são iniciadas
+            var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
+    
+            var bomb = bombs.create(x, 16, 'bomb');
+            bomb.setBounce(1);
+            bomb.setCollideWorldBounds(true);
+            bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+            bomb.allowGravity = false;
+    
+        }
+    }
+    //É claro que as bombas irão ricochetear nas plataformas, e se o jogador acertá-las, 
+    //chamaremos a hitBombfunção. Tudo o que isso fará é parar o jogo e deixar o jogador vermelho:
+    function hitBomb (player, bomb)
+    {
+        this.physics.pause();
+        player.setTint(0xff0000);
+        player.anims.play('turn');
+        gameOver = true;
+    }
+    
+    </script>
+    
+    </body>
+    </html>

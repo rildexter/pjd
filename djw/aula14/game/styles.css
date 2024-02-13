@@ -1,0 +1,28 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin-top: 50px;
+}
+
+#dialogo {
+    margin-bottom: 20px;
+}
+
+#personagemImagem {
+    display: none;
+    width: 100px;
+    height: 100px;
+    margin-bottom: 20px;
+    margin: 0 auto;
+}
+
+#continueButton {
+    display: none;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#continueButton:hover {
+    background-color: #ddd;
+}

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Menu - SuperCoin</title>
+    <style type="text/css">
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .menu-container {
+            text-align: center;
+            color: #fff;
+            z-index: 1;
+        }
+
+        .game-title {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .start-button {
+            font-size: 24px;
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .bomb-image {
+            width: 12.0rem; /* Ajuste conforme necessário */
+            height: 12.0rem; /* Ajuste conforme necessário */
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="menu-container">
+    <div class="game-title">SuperCoin</div>
+    <button class="start-button" onclick="startGame()">Iniciar Jogo</button><br>
+    <img class="bomb-image" src="assets/bomb.gif" alt="Bomb Image">
+</div>
+
+<script>
+    function startGame() {
+        window.location.href = 'index_v1.html';
+    }
+</script>
+
+</body>
+</html>

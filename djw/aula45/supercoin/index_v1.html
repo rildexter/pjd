@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Criando nosso jogo</title>
+    <script src="./assets/phaser.js"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<script type="text/javascript">
+
+    var config = {
+        type: Phaser.AUTO,
+        width: 800,
+        height: 600,
+        physics: {
+            default: 'arcade',
+            arcade: {
+                gravity: { y: 300 },
+                debug: false
+            }
+        },
+        scene: {
+            preload: preload,
+            create: create,
+            update: update
+        }
+    };
+
+    var player;
+    var coins;
+    var bombs;
+    var platforms;
+    var cursors;
+    var score = 0;
+    var health = 100;
+    var gameOver = false;
+    var scoreText;
+    var highestScoreText;
+    var healthBar;
+    var hearts;
+    var heartsCollected = 0;
+    var coinsCollected = 0;
+    var explosionSound;
+    var backgroundMusic;
+    var coinSound;
+    var highScore = 0;
+
+    var game = new Phaser.Game(config);
+    var highestScore = localStorage.getItem('highestScore') || 0;
+
+    function preload() {
+        this.load.image('sky', 'assets/sky.png');
+        this.load.image('ground', 'assets/platform.png');
+        this.load.image('coin', 'assets/coin.png');
+        this.load.image('bomb', 'assets/bomb.png');
+        this.load.image('heart', 'assets/heart.png');
+        this.load.image('restart', 'assets/restart_button.png');
+        this.load.spritesheet('dude', 'assets/boy.png', { frameWidth: 32, frameHeight: 44 });
+        this.load.spritesheet('explosion', 'assets/explosion.png', { frameWidth: 64, frameHeight: 64 });
+
+        this.load.audio('explosionSound', 'assets/explosion.mp3');
+        this.load.audio('backgroundMusic', 'assets/tema.mp3');
+        this.load.audio('coinSound', 'assets/coin.mp3');
+    }
+
+    function create() {
+        this.add.image(400, 300, 'sky');
+
+        backgroundMusic = this.sound.add('backgroundMusic', { loop: true });
+        backgroundMusic.play();
+
+        coinSound = this.sound.add('coinSound');
+
+        platforms = this.physics.add.staticGroup();
+        platforms.create(400, 568, 'ground').setScale(2).refreshBody();
+        platforms.create(600, 400, 'ground');
+        platforms.create(50, 250, 'ground');
+        platforms.create(750, 220, 'ground');
+
+        player = this.physics.add.sprite(100, 450, 'dude').setScale(2);
+        player.setBounce(0.2);
+        player.setCollideWorldBounds(true);
+
+        this.anims.create({
+            key: 'left',
+            frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 4 }),
+            frameRate: 10,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'turn',
+            frames: [{ key: 'dude', frame: 5 }],
+            frameRate: 20
+        });
+
+        this.anims.create({
+            key: 'right',
+            frames: this.anims.generateFrameNumbers('dude', { start: 6, end: 10 }),
+            frameRate: 10,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'explode',
+            frames: this.anims.generateFrameNumbers('explosion', { start: 0, end: 15 }),
+            frameRate: 16,
+            hideOnComplete: true
+        });
+
+        cursors = this.input.keyboard.createCursorKeys();
+
+        coins = this.physics.add.group({
+            key: 'coin',
+            repeat: 2,
+            setXY: { x: Phaser.Math.Between(50, 750), y: 0, stepX: 0 }
+        });
+
+        coins.children.iterate(function (child) {
+            child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+            child.setCollideWorldBounds(true);
+            child.setVelocity(Phaser.Math.Between(-50, 50), 20);
+            child.allowGravity = true;
+            child.x = Phaser.Math.Between(50, 750);
+            child.y = Phaser.Math.Between(-100, 0);
+        });
+
+        bombs = this.physics.add.group();
+
+        scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#000' });
+        healthBar = this.add.graphics();
+        highestScoreText = this.add.text(16, 50, 'Record: ' + highestScore, { fontSize: '32px', fill: '#000' });
+        updateHealthBar();
+
+        hearts = this.physics.add.group({
+            key: 'heart',
+            repeat: 0,
+            setXY: { x: 12, y: 0, stepX: 70 },
+            visible: false
+        });
+
+        this.physics.add.collider(player, platforms);
+        this.physics.add.collider(coins, platforms);
+        this.physics.add.collider(bombs, platforms);
+        this.physics.add.collider(hearts, platforms);
+
+        this.physics.add.overlap(player, coins, collectCoin, null, this);
+        this.physics.add.overlap(player, hearts, collectHeart, null, this);
+        this.physics.add.collider(player, bombs, hitBomb, null, this);
+        this.physics.add.collider(bombs, coins, hitBomb2, null, this);
+    }
+
+    function update() {
+        if (gameOver) {
+            return;
+        }
+
+        if (cursors.left.isDown) {
+            player.setVelocityX(-160);
+            player.anims.play('left', true);
+        } else if (cursors.right.isDown) {
+            player.setVelocityX(160);
+            player.anims.play('right', true);
+        } else {
+            player.setVelocityX(0);
+            player.anims.play('turn');
+        }
+
+        if (cursors.up.isDown && player.body.touching.down) {
+            player.setVelocityY(-330);
+        }
+    }
+
+    function collectCoin(player, coin) {
+        coin.disableBody(true, true);
+
+        score += 1;
+        scoreText.setText('Score: ' + score);
+
+        coinSound.play();
+
+        if (score % 20 === 0) {
+            heartsCollected++;
+
+            if (heartsCollected === 1) {
+                var x = Phaser.Math.Between(50, 750);
+                var y = 0;
+                var heart = hearts.create(x, y, 'heart');
+                heart.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+                heart.setCollideWorldBounds(true);
+                heart.setVelocity(Phaser.Math.Between(-100, 100), 20);
+                heart.allowGravity = true;
+            }
+        }
+
+        if (coins.countActive(true) === 0) {
+            coins.children.iterate(function (child) {
+                child.enableBody(true, child.x, 0, true, true);
+            });
+
+            var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
+
+            var bomb = bombs.create(x, 16, 'bomb');
+            bomb.setBounce(1);
+            bomb.setCollideWorldBounds(true);
+            bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+            bomb.allowGravity = false;
+        }
+    }
+
+    function hitBomb(player, bomb) {
+        decreaseHealth(20);
+
+        var explosion = this.add.sprite(bomb.x, bomb.y, 'explosion');
+        explosion.play('explode');
+
+        explosionSound = this.sound.add('explosionSound');
+        explosionSound.play();
+
+        bomb.disableBody(true, true);
+
+        player.setTint(0xff0000);
+
+        if (health <= 0) {
+            this.physics.pause();
+            player.anims.play('turn');
+            gameOver = true;
+
+            var gameOverText = this.add.text(400, 170, 'Game Over', { fontSize: '64px', fill: '#ff0000' }).setOrigin(0.5);
+
+            if (score > highestScore) {
+                highestScore = score;
+                localStorage.setItem('highestScore', highestScore);
+                highestScoreText.setText('Record: ' + highestScore);
+                var newRecordText = this.add.text(400, 250, 'New Record!', { fontSize: '32px', fill: '#ff0000' }).setOrigin(0.5);
+            }
+
+            var restartButton = this.add.image(400, 300, 'restart').setInteractive();
+            restartButton.setScale(0.5);
+            restartButton.on('pointerdown', function () {
+                gameOver = false;
+                health = 100;
+                score = 0;
+                heartsCollected = 0;
+                updateHealthBar();
+                scoreText.setText('Score: 0');
+                gameOverText.destroy();
+                restartButton.destroy();
+                if (newRecordText) {
+                    newRecordText.destroy();
+                }
+                this.scene.restart();
+            }, this);
+        } else {
+            this.time.delayedCall(500, () => {
+                player.clearTint();
+            });
+        }
+    }
+
+    function hitBomb2(bomb, coin) {
+        var explosion = this.add.sprite(bomb.x, bomb.y, 'explosion');
+        explosion.play('explode');
+
+        bomb.disableBody(true, true);
+        coin.disableBody(true, true);
+    }
+
+    function collectHeart(player, heart) {
+        heart.disableBody(true, true);
+        increaseHealth(20);
+        heartsCollected = 0;
+        hearts.children.iterate(function (child) {
+            child.setVisible(false);
+        });
+    }
+
+    function updateHealthBar() {
+        healthBar.clear();
+        healthBar.fillStyle(0x33cc00, 1);
+        healthBar.fillRect(550, 20, health * 2, 20);
+    }
+
+    function increaseHealth(amount) {
+        health += amount;
+        if (health > 100) {
+            health = 100;
+        }
+        updateHealthBar();
+    }
+
+    function decreaseHealth(amount) {
+        health -= amount;
+        if (health < 0) {
+            health = 0;
+        }
+        updateHealthBar();
+    }
+
+</script>
+
+</body>
+</html>

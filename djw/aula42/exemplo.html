@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Jogo com Recomeço</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        #game-container {
+            border: 2px solid #333;
+            padding: 20px;
+            text-align: center;
+        }
+        #restart-button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <!-- Conteúdo do Jogo aqui -->
+    <p>Seu Jogo Incrível</p>
+    <button id="restart-button">Recomeçar</button>
+</div>
+
+<script>
+    // Lógica do Jogo e Funcionalidade do Recomeço em JavaScript
+    document.getElementById('restart-button').addEventListener('click', function () {
+        // Lógica de reinício do jogo aqui
+        alert('Jogo reiniciado!');
+    });
+</script>
+
+</body>
+</html>

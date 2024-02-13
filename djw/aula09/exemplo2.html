@@ -1,0 +1,42 @@
+<!-- Exemplo Prático: Animação de Sprites e Efeitos de Paralaxe -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .sprite-animation {
+            width: 64px;
+            height: 64px;
+            background-image: url('sprite-sheet.png');
+            animation: spriteAnimation 0.8s steps(8) infinite;
+        }
+
+        @keyframes spriteAnimation {
+            to {
+                background-position: -512px;
+            }
+        }
+
+        .parallax-effect {
+            background-image: url('parallax-background.jpg');
+            background-size: cover;
+            height: 400px;
+            animation: parallaxAnimation 10s linear infinite;
+        }
+
+        @keyframes parallaxAnimation {
+            to {
+                background-position: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h2>Animação de Sprites</h2>
+    <div class="sprite-animation"></div>
+
+    <h2>Efeitos de Paralaxe</h2>
+    <div class="parallax-effect"></div>
+</body>
+</html>

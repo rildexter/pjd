@@ -1,0 +1,24 @@
+<!-- Exemplo de Construção de Sprites -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        #gameElement {
+            width: 135px;
+            height: 340px;
+            background-image: url('img/sprites.png');
+            animation: animateSprite 1s steps(7) infinite;
+        }
+
+        @keyframes animateSprite {
+            from { background-position: 0; }
+            to { background-position: -256px; }
+        }
+    </style>
+</head>
+<body>
+    <div id="gameElement"></div>
+</body>
+</html>

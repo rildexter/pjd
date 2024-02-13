@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jogo com Barra de Energia</title>
+  <style>
+    #energy-bar {
+      width: 200px;
+      height: 20px;
+      background-color: #ddd;
+      margin: 20px;
+      border: 2px solid #333; /* Adiciona uma borda de 2px à barra de energia */
+      overflow: hidden; /* Garante que a borda não aumente o tamanho total da barra */
+    }
+
+    #current-energy {
+      width: 100%;
+      height: 100%;
+      background-color: #4caf50;
+      transition: width 0.5s ease; /* Adiciona uma transição suave à largura da barra */
+    }
+  </style>
+</head>
+<body>
+  <!-- Barra de Energia -->
+  <h1>Life:</h1>
+  <div id="energy-bar">
+    <div id="current-energy"></div>
+  </div>
+
+  <!-- Lógica de Atualização da Barra de Energia -->
+  <script>
+    // Lógica para atualizar a barra de energia (pode ser adaptada conforme a interação do jogo)
+    const energyBar = document.getElementById('current-energy');
+  
+    function updateEnergyBar(percentage) {
+      energyBar.style.width = `${percentage}%`;
+    }
+  
+    // Exemplo: Reduzir a energia ao clicar em um botão
+    document.addEventListener('click', () => {
+      const currentWidth = parseFloat(energyBar.style.width) || 100; // Pega a largura atual ou assume 100%
+      const newPercentage = Math.max(0, currentWidth - 10); // Reduz 10% da energia
+      updateEnergyBar(newPercentage);
+    });
+  </script>
+</body>
+</html>

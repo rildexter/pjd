@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contador de Cliques</title>
+</head>
+<body>
+<button id="btnClick">Clique Aqui</button>
+<p id="clickCount">0 cliques</p>
+
+<script>
+// Obtém uma referência ao botão e ao parágrafo onde exibiremos o contador
+const btnClick = document.getElementById('btnClick');
+const clickCount = document.getElementById('clickCount');
+
+// Inicializa o contador
+let contadorCliques = 0;
+
+// Adiciona um ouvinte de evento de clique ao botão
+btnClick.addEventListener('click', function() {
+    // Incrementa o contador de cliques
+    contadorCliques++;
+    // Atualiza o texto do parágrafo com o novo valor do contador
+    clickCount.textContent = contadorCliques + (contadorCliques === 1 ? ' clique' : ' cliques');
+});
+</script>
+</body>
+</html>

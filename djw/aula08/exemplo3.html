@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTML5 Game</title>
+  <style>
+    #volumeControl {
+      width: 80%;
+      margin: 20px auto;
+    }
+  </style>
+</head>
+<body>
+  <input type="range" id="volumeControl" min="0" max="100" value="50">
+  <script>
+    // Código JavaScript para controle de volume
+    const volumeControl = document.getElementById('volumeControl');
+    
+    volumeControl.addEventListener('input', handleVolumeChange);
+
+    function handleVolumeChange(event) {
+      const volumeValue = event.target.value;
+      // Lógica para ajustar o volume do jogo com base em volumeValue
+    }
+  </script>
+</body>
+</html>

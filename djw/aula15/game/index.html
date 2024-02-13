@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+ </head>
+<body>
+    <h1>Escolha o Seu Personagem</h1>
+    <p id="dialogo">NPC: Bem-vindo! Escolha o seu personagem para a aventura:</p>
+    <button onclick="escolherPersonagem('Guerreiro')">Guerreiro</button>
+    <button onclick="escolherPersonagem('Mago')">Mago</button>
+    <button onclick="escolherPersonagem('Arqueiro')">Arqueiro</button>
+
+    <!-- Inicialmente, a imagem e botão continuar ocultos -->
+    <img id="personagemImagem" src="" alt="Imagem do Personagem" style="display: none">
+
+    <div id="continueButton" onclick="continuarJogo()" style="display: none">Continue</div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

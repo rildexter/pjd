@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recurso Avançados</title>
+    <style>
+        #interativo{
+          display: flex;
+          flex-direction: column; 
+          align-items: center; 
+          margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="interativo">
+        <button onclick="showAlert()">Clique-me</button>
+        <input type="text" id='inputField' placeholder="Digite algo">
+        <button onclick="changeText()">Alterar texto</button>
+        <div id ="output"></div>
+    </div>
+    <script>
+        function showAlert(){
+            alert("Você clicou");
+        }
+        function changeText(){
+            var inputField = document.getElementById("inputField");
+            var outputDiv = document.getElementById("output");
+            var newText = "Texto Alterado: "+ inputField.value;
+            outputDiv.innerText = newText;
+
+        }
+    </script>
+</body>
+</html>

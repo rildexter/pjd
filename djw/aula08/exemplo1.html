@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTML5 Game</title>
+  <style>
+    canvas {border: 1px solid #000; }
+  </style>
+</head>
+<body>
+  <canvas id="gameCanvas" width="800" height="600"></canvas>
+  <br>
+  <audio id="gameAudio" controls>
+    <source src="trilha-sonora.mp3" type="audio/mp3">
+    Seu navegador não suporta o elemento de áudio.
+  </audio><br>
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const context = canvas.getContext('2d');
+
+    const audio = document.getElementById('gameAudio');
+    audio.play();
+
+    const video = document.createElement('video');
+    video.src = 'video-introducao.mp4';
+    video.controls = true;
+    document.body.appendChild(video);
+  </script>
+</body>
+</html>
