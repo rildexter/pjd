@@ -1,0 +1,104 @@
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEditor.Tilemaps;
+using UnityEngine;
+public class PlayerLogic : MonoBehaviour
+{
+    //1-variavel que checa o toque no chão
+    [SerializeField] private Transform groundCheck;
+    //2-compara a distancia entre o chão e player
+    [SerializeField] private float groundDist;
+    //3-verifica a layer a ser chegada
+    [SerializeField] private LayerMask groundLayer;
+
+    //8-variavel de controle
+    private bool canJump;
+
+    //4-variavel de controle
+    private bool isGroundCheck;
+
+    [SerializeField] private float moveSpeed;
+    [SerializeField] private float jumpForce;
+    private float inputDirection;
+
+    private bool isDirectionRight = true;
+    private Rigidbody2D rb2d;
+    void Start()
+    {
+        rb2d = GetComponent<Rigidbody2D>();
+    }
+    void Update()
+    {
+        GetInputMove();
+        DirectionCheck();
+    }
+    private void FixedUpdate()
+    {
+        MoveLogic();
+        //6-chamada do metodo
+        CheckArea();
+        //10-chamando metodo de controle de pulo
+        CanJump();
+    }
+    //9-metodo para controle do pulo
+    void CanJump()
+    {
+        if(isGroundCheck && rb2d.velocity.y <= 0)
+        {
+            canJump = true;
+        }
+        else
+        {
+            canJump = false;
+        }
+    }
+    void CheckArea()
+    {
+        //5-metodo cria um circulo invisivel no player para checar a layer abaixo do personagem
+        isGroundCheck = Physics2D.OverlapCircle(groundCheck.position, groundDist, groundLayer);
+    }
+        //7-Metodo para visualizar o circulo de checagem
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(groundCheck.position, groundDist);
+    }
+    void DirectionCheck()
+    {
+        if (isDirectionRight && inputDirection < 0)
+        {
+            Flip();
+        }
+        else if (!isDirectionRight && inputDirection > 0)
+        {
+            Flip();
+        }
+
+    }
+    void GetInputMove()
+    {
+        inputDirection = Input.GetAxisRaw("Horizontal");
+        if (Input.GetButtonDown("Jump"))
+        {
+            Jump();
+        }
+    }
+    void MoveLogic()
+    {
+        rb2d.velocity = new Vector2(inputDirection * moveSpeed, rb2d.velocity.y);
+    }
+    void Jump()
+    {
+        //11-criar uma condição de pulo
+        if (canJump)
+        {
+            rb2d.velocity = new Vector2(rb2d.velocity.x, jumpForce);
+        }
+    }
+    void Flip()
+    {
+        isDirectionRight = !isDirectionRight;
+        transform.Rotate(0.0f, 180.0f, 0.0f);
+    }
+}
+

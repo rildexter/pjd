@@ -1,0 +1,62 @@
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEditor.Tilemaps;
+using UnityEngine;
+public class PlayerLogic : MonoBehaviour
+{
+    [SerializeField] private float moveSpeed;
+    //1 - Variavel de controle do pulo
+    [SerializeField] private float jumpForce;
+    private float inputDirection;
+    private bool isDirectionRight = true;
+    private Rigidbody2D rb2d;
+    void Start()
+    {
+        rb2d = GetComponent<Rigidbody2D>();
+    }
+    void Update()
+    {
+        GetInputMove();
+        DirectionCheck();
+    }
+    private void FixedUpdate()
+    {
+        MoveLogic();
+    }
+    void DirectionCheck()
+    {
+        if (isDirectionRight && inputDirection < 0)
+        {
+            Flip();
+        }
+        else if (!isDirectionRight && inputDirection > 0)
+        {
+            Flip();
+        }
+
+    }
+    void GetInputMove()
+    {
+        inputDirection = Input.GetAxisRaw("Horizontal");
+        //2 - imput do jump
+        if (Input.GetButtonDown("Jump"))
+        {
+            Jump();
+        }
+    }
+    void MoveLogic()
+    {
+        rb2d.velocity = new Vector2(inputDirection * moveSpeed, rb2d.velocity.y);
+    }
+    void Jump()
+    {
+        rb2d.velocity = new Vector2(rb2d.velocity.x, jumpForce);
+    }
+    void Flip()
+    {
+        isDirectionRight = !isDirectionRight;
+        transform.Rotate(0.0f, 180.0f, 0.0f);
+    }
+}
+

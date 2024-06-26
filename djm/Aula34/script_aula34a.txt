@@ -1,0 +1,55 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEditor.Tilemaps;
+using UnityEngine;
+public class PlayerLogic : MonoBehaviour
+{
+    [SerializeField] private float moveSpeed;
+
+    private float inputDirection;
+
+    //variavel de controle para saber se o player esta virado para direita ou esquerda
+    private bool isDirectionRight = true; 
+    private Rigidbody2D rb2d;
+    void Start()
+    {
+        rb2d = GetComponent<Rigidbody2D>();
+    }
+    void Update()
+    {
+        GetInputMove();
+        DirectionCheck();
+    }
+    private void FixedUpdate()
+    {
+        MoveLogic();
+    }
+    //vamos criar um novo metodo para checar a direção
+    void DirectionCheck()
+    {
+        if (isDirectionRight && inputDirection < 0)
+        {
+            Flip();
+        }
+        else if(!isDirectionRight && inputDirection > 0)
+        {
+            Flip();
+        }
+
+    }
+    void GetInputMove()
+    {
+        inputDirection = Input.GetAxisRaw("Horizontal");
+    }
+    void MoveLogic()
+    {
+        rb2d.velocity = new Vector2(inputDirection * moveSpeed, rb2d.velocity.y);
+    }
+    void Flip()
+    {
+        isDirectionRight = !isDirectionRight;
+        //queremos uma rotação em Y
+        transform.Rotate(0.0f, 180.0f, 0.0f);
+    }
+}
+
