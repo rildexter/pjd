@@ -1,0 +1,19 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class TriggerDamage : MonoBehaviour
+{
+    // 1- gerar metodo que faz a colisão com o player
+
+    //Veja que estamos chamndo o sistema dos corações
+    public HeartSystem heart;
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            heart.vida--;
+        }
+    }
+
+}

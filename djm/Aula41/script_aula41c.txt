@@ -1,0 +1,52 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class HeartSystem : MonoBehaviour
+{
+    public int vida;
+    public int vidaMaxima;
+    public Image[] hearth;
+    public Sprite cheio;
+    public Sprite vazio;
+    void Start()
+    {
+        
+    }
+    void Update()
+    {
+        //2-chame o metodo HealthLogic()
+        HealthLogic();
+    }
+    //1-crie um novo metodo que controla como o coração se apresenta em tela
+    void HealthLogic()
+    {
+        //4-condicional para repetição
+        if(vida>vidaMaxima) 
+        {
+            vida = vidaMaxima; 
+        }
+
+        for (int i = 0; i < hearth.Length; i++)
+        {
+            //3- adicionando o status de perdendo vida
+            if(i<vida)
+            {
+                hearth[i].sprite = cheio;
+            }
+            else
+            {
+                hearth[i].sprite = vazio;
+            }
+            if(i< vidaMaxima)
+            {
+                hearth[i].enabled = true;
+            }
+            else
+            {
+                hearth[i].enabled=false;
+            }
+        }
+    }
+}

@@ -1,0 +1,26 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+//2-adicione a biblioteca de UI da unity
+using UnityEngine.UI;
+
+public class HeartSystem : MonoBehaviour
+{
+    //1- Crie duas variaveis que irão comportar o status da vida e
+    //seu maximo valor
+    public int vida;
+    public int vidaMaxima;
+
+    //3- crie uma variavel vetor que irá conter os corações da tela
+    public Image[] hearth;
+    public Sprite cheio;
+    public Sprite vazio;
+    void Start()
+    {
+        
+    }
+    void Update()
+    {
+        
+    }
+}
