@@ -1,0 +1,38 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Ball : MonoBehaviour
+{
+    public bool isRigth;
+    public float speed;
+
+    public Transform point_R;
+    public Transform point_L;
+
+    void Start()
+    {
+        
+    }
+
+    void Update()
+    {
+     if(isRigth)
+        {
+            transform.Translate(Vector2.right * speed * Time.deltaTime);
+        }
+        else
+        {
+            transform.Translate(-Vector2.right * speed * Time.deltaTime);
+        }
+        if (Input.GetMouseButtonDown(0))
+        {
+            isRigth = !isRigth;
+        }
+        if (Vector2.Distance(transform.position, point_L.position) < 0.1f ||
+            Vector2.Distance(transform.position, point_R.position) < 0.1f)
+        {
+            isRigth = !isRigth;
+        }
+    }
+}

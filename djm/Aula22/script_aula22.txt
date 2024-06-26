@@ -1,0 +1,27 @@
+using System.Collections; // Importa o namespace System.Collections para usar classes de coleções
+using System.Collections.Generic; // Importa o namespace System.Collections.Generic para usar coleções genéricas
+using UnityEngine; // Importa o namespace UnityEngine para acessar funcionalidades do Unity
+
+public class Colectable : MonoBehaviour // Declara a classe Colectable e herda de MonoBehaviour, indicando que é um componente do Unity
+{
+    public Rigidbody2D rig; // Declara uma variável pública do tipo Rigidbody2D chamada rig
+    public float speed; // Declara uma variável pública do tipo float chamada speed
+
+    private void FixedUpdate() // Método chamado em intervalos fixos, ideal para manipulações de física
+    {
+        // Move a posição do objeto rig para baixo (eixo Y) com uma velocidade constante, baseada na variável speed e no tempo decorrido desde o último quadro
+        rig.MovePosition(transform.position + Vector3.down * speed * Time.deltaTime);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision) // Método chamado quando um objeto colide com o trigger do coletável
+    {
+        // Verifica se o objeto que colidiu tem a tag "Player"
+        if (collision.CompareTag("Player"))
+        {
+            // Chama o método AddScore do GameController para adicionar pontuação ao jogador
+            GameController.instance.AddScore();
+            // Destroi o objeto coletável após ser coletado
+            Destroy(gameObject);
+        }
+    }
+}

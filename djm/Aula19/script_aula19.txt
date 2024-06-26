@@ -1,0 +1,55 @@
+
+using System.Collections; // Importa o namespace System.Collections para usar classes de coleções
+using System.Collections.Generic; // Importa o namespace System.Collections.Generic para usar coleções genéricas
+using UnityEngine; // Importa o namespace UnityEngine para acessar funcionalidades do Unity
+
+public class GameController : MonoBehaviour // Declara a classe GameController e herda de MonoBehaviour, indicando que é um componente do Unity
+{
+    public GameObject gameOver; // Declara uma variável pública do tipo GameObject chamada gameOver, que armazena o objeto de tela de game over
+    public static GameController instance; // Declara uma variável estática chamada instance, que permite acessar esta classe de qualquer lugar do código
+
+    private void Awake() // Método chamado quando o objeto é inicializado
+    {
+        instance = this; // Define a instância atual desta classe como a instância estática, garantindo que haja apenas uma instância da classe GameController
+    }
+
+    public void ShowGameOver() // Método público que mostra a tela de game over
+    {
+        gameOver.SetActive(true); // Ativa o objeto de tela de game over para mostrá-lo ao jogador
+    }
+}
+
+
+
+---------------------------------------------------------
+using System.Collections; // Importa o namespace System.Collections para usar classes de coleções
+using System.Collections.Generic; // Importa o namespace System.Collections.Generic para usar coleções genéricas
+using UnityEngine; // Importa o namespace UnityEngine para acessar funcionalidades do Unity
+
+public class Obstacle : MonoBehaviour // Declara a classe Obstacle e herda de MonoBehaviour, indicando que é um componente do Unity
+{
+    public Rigidbody2D rig; // Declara uma variável pública do tipo Rigidbody2D chamada rig
+    public float speed; // Declara uma variável pública do tipo float chamada speed
+
+    void Start() // Método chamado uma vez quando o objeto é inicializado
+    {
+        // Rotaciona o objeto em torno do eixo Z com um ângulo aleatório entre -75 e -120 graus
+        transform.Rotate(new Vector3(0, 0, Random.Range(-75, -120)));
+    }
+
+    void FixedUpdate() // Método chamado em intervalos fixos, ideal para manipulações de física
+    {
+        // Move a posição do objeto rig na direção da sua direita (eixo X) com uma velocidade constante, baseada na variável speed e no tempo decorrido desde o último quadro
+        rig.MovePosition(transform.position + transform.right * speed * Time.deltaTime);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision) // Método chamado quando um objeto colide com o trigger do obstáculo
+    {
+        // Verifica se o objeto que colidiu tem a tag "Player"
+        if (collision.CompareTag("Player"))
+        {
+            // Chama o método ShowGameOver do GameController para mostrar a tela de game over
+            GameController.instance.ShowGameOver();
+        }
+    }
+}

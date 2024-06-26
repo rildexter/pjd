@@ -1,0 +1,28 @@
+using System.Collections; // Importa o namespace System.Collections para usar classes de coleções
+using System.Collections.Generic; // Importa o namespace System.Collections.Generic para usar coleções genéricas
+using UnityEngine; // Importa o namespace UnityEngine para acessar funcionalidades do Unity
+using UnityEngine.SceneManagement; // Importa o namespace UnityEngine.SceneManagement para acessar funcionalidades de cena do Unity
+
+public class GameController : MonoBehaviour // Declara a classe GameController e herda de MonoBehaviour, indicando que é um componente do Unity
+{
+    public GameObject gameOver; // Declara uma variável pública do tipo GameObject chamada gameOver, que armazena o objeto de tela de game over
+    public static GameController instance; // Declara uma variável estática chamada instance, que permite acessar esta classe de qualquer lugar do código
+
+    private void Awake() // Método chamado quando o objeto é inicializado
+    {
+        instance = this; // Define a instância atual desta classe como a instância estática, garantindo que haja apenas uma instância da classe GameController
+    }
+
+    public void ShowGameOver() // Método público que mostra a tela de game over
+    {
+        gameOver.SetActive(true); // Ativa o objeto de tela de game over para mostrá-lo ao jogador
+    }
+
+    public void RestartGame() // Método público que reinicia o jogo
+    {
+        // Obtém a cena ativa
+        Scene scene = SceneManager.GetActiveScene();
+        // Recarrega a cena pelo nome, reiniciando o jogo
+        SceneManager.LoadScene(scene.name);
+    }
+}

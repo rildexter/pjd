@@ -1,0 +1,36 @@
+using System.Collections; // Importa o namespace System.Collections para usar classes de coleções
+using System.Collections.Generic; // Importa o namespace System.Collections.Generic para usar coleções genéricas
+using UnityEngine; // Importa o namespace UnityEngine para acessar funcionalidades do Unity
+
+public class Spawn : MonoBehaviour // Declara a classe Spawn e herda de MonoBehaviour, indicando que é um componente do Unity
+{
+    public GameObject prefab; // Declara uma variável pública do tipo GameObject chamada prefab, que será o objeto a ser instanciado
+
+    public float spawnTime; // Declara uma variável pública do tipo float chamada spawnTime, que representa o tempo entre as instâncias dos objetos
+    public float timeCount; // Declara uma variável pública do tipo float chamada timeCount, que representa o tempo decorrido desde a última instância
+
+    void Start() // Método chamado uma vez quando o objeto é inicializado
+    {
+        // Este método está vazio, não contém nenhuma instrução.
+    }
+
+    void Update() // Método chamado a cada quadro de atualização
+    {
+        // Adiciona o tempo decorrido desde o último quadro ao contador de tempo
+        timeCount += Time.deltaTime;
+
+        // Verifica se o tempo decorrido é maior que o tempo entre as instâncias
+        if (timeCount > spawnTime)
+        {
+            // Instancia o objeto prefab na posição e rotação do objeto Spawn
+            GameObject go = Instantiate(prefab, transform.position, transform.rotation);
+            
+            // Destroi o objeto instanciado após 5 segundos
+            Destroy(go, 5f);
+            
+            // Reseta o contador de tempo
+            timeCount = 0;
+        }
+    }
+}
+

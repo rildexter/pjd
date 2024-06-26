@@ -1,0 +1,21 @@
+using System.Collections; // Importa o namespace System.Collections para usar classes de coleções
+using System.Collections.Generic; // Importa o namespace System.Collections.Generic para usar coleções genéricas
+using UnityEngine; // Importa o namespace UnityEngine para acessar funcionalidades do Unity
+
+public class Obstacle : MonoBehaviour // Declara a classe Obstacle e herda de MonoBehaviour, indicando que é um componente do Unity
+{
+    public Rigidbody2D rig; // Declara uma variável pública do tipo Rigidbody2D chamada rig
+    public float speed; // Declara uma variável pública do tipo float chamada speed
+
+    void Start() // Método chamado uma vez quando o objeto é inicializado
+    {
+        // Rotaciona o objeto em torno do seu eixo Z com um ângulo aleatório entre -75 e -120 graus
+        transform.Rotate(new Vector3(0, 0, Random.Range(-75, -120)));
+    }
+
+    void FixedUpdate() // Método chamado em intervalos fixos, ideal para manipulações de física
+    {
+        // Move a posição do objeto rig na direção da sua direita (eixo X) com uma velocidade constante, baseada na variável speed e no tempo decorrido desde o último quadro
+        rig.MovePosition(transform.position + transform.right * speed * Time.deltaTime);
+    }
+}
